@@ -21,13 +21,25 @@ namespace ListViewAndAdapter
             SetContentView(Resource.Layout.Main);
 
             var instructorList = FindViewById<ListView>(Resource.Id.instructorListView);
+            instructorList.ItemClick += OnItemInstructorClick;
 
+            //create adapter to list view
             var adapter = new ArrayAdapter<Instructor>(this,//context
                 Android.Resource.Layout.SimpleListItem1,//The id of the layout file to use for the row
                 InstructorData.Instructor);//The collection of instructors
 
             //Load the ArrayAdapter into the Adapter property of the ListView
             instructorList.Adapter = adapter;
+        }
+
+        void OnItemInstructorClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            var itemInstructor = InstructorData.Instructor[e.Position];
+
+            var dialog = new AlertDialog.Builder(this);
+            dialog.SetMessage(itemInstructor.Name);
+            dialog.SetNeutralButton("ok", delegate { });
+            dialog.Show();
         }
     }
 }
