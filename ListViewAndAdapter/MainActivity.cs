@@ -24,12 +24,15 @@ namespace ListViewAndAdapter
             instructorList.ItemClick += OnItemInstructorClick;
 
             //create adapter to list view
-            var adapter = new ArrayAdapter<Instructor>(this,//context
+            /*var adapter = new ArrayAdapter<Instructor>(this,//context
                 Android.Resource.Layout.SimpleListItem1,//The id of the layout file to use for the row
                 InstructorData.Instructor);//The collection of instructors
 
             //Load the ArrayAdapter into the Adapter property of the ListView
-            instructorList.Adapter = adapter;
+            instructorList.Adapter = adapter;*/
+
+            var instructorAdapter = new InstructorAdapter(InstructorData.Instructor);
+            instructorList.Adapter = instructorAdapter;
         }
 
         void OnItemInstructorClick(object sender, AdapterView.ItemClickEventArgs e)
