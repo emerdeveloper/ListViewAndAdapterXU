@@ -20,6 +20,10 @@ namespace ListViewAndAdapter
             var temp = new List<Instructor>();
 
             AddInstructors(temp);
+            AddInstructors(temp);
+            AddInstructors(temp);
+            AddInstructors(temp);
+            AddInstructors(temp);
 
             Instructor = temp.OrderBy(i => i.Name).ToList();
         }

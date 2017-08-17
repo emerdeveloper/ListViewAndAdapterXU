@@ -48,24 +48,44 @@ namespace ListViewAndAdapter
 
         //This will be who generate of rows to listView
         //We use Inflater Access
-        public override View GetView(int position, View convertView, 
-            ViewGroup parent)//The ViewGroup that will contain your inflated layout
+        public override View GetView(int position, 
+            View convertView, //this is a layout
+            ViewGroup parent)//The ViewGroup that will contain your inflated layout, //thos content a context
         {
             //our Adapter need a inflater
             var inflater = LayoutInflater.From(parent.Context);
-            var view = inflater.Inflate(Resource.Layout.InstructorRow, parent, false);
+            //var view = inflater.Inflate(Resource.Layout.InstructorRow, parent, false);
 
-            var photo = view.FindViewById<ImageView>(Resource.Id.photoImageView);
-            var name = view.FindViewById<TextView>(Resource.Id.nameTextView);
-            var specialty = view.FindViewById<TextView>(Resource.Id.specialtyTextView);
+            var view = convertView;
+
+            if (view == null) {
+                view = inflater.Inflate(Resource.Layout.InstructorRow, parent, false);
+
+                var photo = view.FindViewById<ImageView>(Resource.Id.photoImageView);
+                var name = view.FindViewById<TextView>(Resource.Id.nameTextView);
+                var specialty = view.FindViewById<TextView>(Resource.Id.specialtyTextView);
+
+                //View has a Tag property you can use to store any extra info you need
+                //the object ViewHolder populate it with the view references, and store it in the Tag property of the layout. 
+                view.Tag = new ViewHolder()
+                {
+                    Photo = photo,
+                    Name = name,
+                    Specialty = specialty,
+                };
+            }
+            var holder = (ViewHolder)view.Tag;
 
             //Get Images
-            Stream stream = parent.Context.Assets.Open(Instructors[position].ImageUrl);
-            Drawable drawable = Drawable.CreateFromStream(stream, null);
-            photo.SetImageDrawable(drawable);
+            /** Stream stream = parent.Context.Assets.Open(Instructors[position].ImageUrl);
+             Drawable drawable = Drawable.CreateFromStream(stream, null);
+             photo.SetImageDrawable(drawable);*/
 
-            name.Text = Instructors[position].Name;
-            specialty.Text = Instructors[position].Specialty;
+            //Now we want to populate the views with our code-behind data, 
+            //we use the references in the holder instead of looking them up again with FindViewById.
+            holder.Photo.SetImageDrawable(ImageAssetManager.Get(parent.Context,Instructors[position].ImageUrl));
+            holder.Name.Text = Instructors[position].Name;
+            holder.Specialty.Text = Instructors[position].Specialty;
 
             return view;
         }
