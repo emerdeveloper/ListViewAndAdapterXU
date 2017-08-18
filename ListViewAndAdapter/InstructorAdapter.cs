@@ -11,18 +11,27 @@ using Android.Views;
 using Android.Widget;
 using System.IO;
 using Android.Graphics.Drawables;
+using Java.Lang;
 
 namespace ListViewAndAdapter
 {
-    public class InstructorAdapter : BaseAdapter<Instructor>
+    public class InstructorAdapter : BaseAdapter<Instructor> , ISectionIndexer
     {
         //Collect of Instructor that will be pass to Constructor
         List<Instructor> Instructors;
-
+        //theses will be useful to use in the methods of ISectionIndexer
+        Java.Lang.Object[] sectionHeaders;
+        Dictionary<int, int> positionForSectionMap;
+        Dictionary<int, int> sectionForPositionMap;
         //Constructor
         //We reference to the collection of instructor
         public InstructorAdapter(List<Instructor> Instructors) {
             this.Instructors = Instructors;
+
+            //Call each of the three SectionIndexerBuilder methods and store the results in fields inside your adapter class.
+            sectionHeaders = SectionIndexerBuilder.BuildSectionHeaders(Instructors);
+            positionForSectionMap = SectionIndexerBuilder.BuildPositionForSectionMap(Instructors);
+            sectionForPositionMap = SectionIndexerBuilder.BuildSectionForPositionMap(Instructors);
         }
 
         //it takes an integer position and returns the instructor at that position in the list
@@ -88,6 +97,23 @@ namespace ListViewAndAdapter
             holder.Specialty.Text = Instructors[position].Specialty;
 
             return view;
+        }
+
+        //methods of ISectionIndexer
+        //We use the three variables that declarate above to retun in this methods
+        public int GetPositionForSection(int sectionIndex)
+        {
+            return positionForSectionMap[sectionIndex];
+        }
+
+        public int GetSectionForPosition(int position)
+        {
+            return sectionForPositionMap[position];
+        }
+
+        public Java.Lang.Object[] GetSections()
+        {
+            return sectionHeaders;
         }
     }
 }

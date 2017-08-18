@@ -22,7 +22,7 @@ namespace ListViewAndAdapter
 
             var instructorList = FindViewById<ListView>(Resource.Id.instructorListView);
             instructorList.ItemClick += OnItemInstructorClick;
-
+            instructorList.FastScrollEnabled = true; //Enable Fast Scroll
             //create adapter to list view
             /*var adapter = new ArrayAdapter<Instructor>(this,//context
                 Android.Resource.Layout.SimpleListItem1,//The id of the layout file to use for the row
@@ -39,10 +39,13 @@ namespace ListViewAndAdapter
         {
             var itemInstructor = InstructorData.Instructor[e.Position];
 
-            var dialog = new AlertDialog.Builder(this);
+            var intent = new Intent(this, typeof(InstructorDetailsActivity));
+            intent.PutExtra("position", e.Position);
+            StartActivity(intent);
+            /*var dialog = new AlertDialog.Builder(this);
             dialog.SetMessage(itemInstructor.Name);
             dialog.SetNeutralButton("ok", delegate { });
-            dialog.Show();
+            dialog.Show();*/
         }
     }
 }
